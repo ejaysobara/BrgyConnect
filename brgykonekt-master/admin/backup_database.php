@@ -67,7 +67,7 @@ if (isset($_POST["download_backup"])) {
 }
 
 include "../includes/header.php";
-renderHeader("Backup Database", "Download a SQL backup of barangay records, users, services, and transaction history.", "backup");
+renderHeader("Backup Database", "Download a SQL backup of barangay records, users, services, and transaction history.", "settings");
 ?>
 
 <section class="panel">

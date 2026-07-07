@@ -2,7 +2,7 @@
 include "../../includes/auth_check.php";
 include "../../config/database.php";
 
-requireRoles([1, 2, 3]);
+requireStaffLevel(3); // Secretary and above: document workflow
 
 $message = "";
 $statuses = ["Pending", "Verified", "For Payment", "Paid", "Unpaid", "Free", "Ready for Pickup", "Released", "Cancelled", "Rejected"];

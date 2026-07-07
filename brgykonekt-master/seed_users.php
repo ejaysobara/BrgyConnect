@@ -201,7 +201,24 @@ runQuery($conn, "CREATE TABLE IF NOT EXISTS vaccinations (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
 
+runQuery($conn, "CREATE TABLE IF NOT EXISTS resident_health_info (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    resident_id INT NOT NULL UNIQUE,
+    blood_type VARCHAR(10) DEFAULT 'Unknown',
+    allergies TEXT,
+    medical_conditions TEXT,
+    medications TEXT,
+    disabilities TEXT,
+    philhealth_number VARCHAR(30) DEFAULT '',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)");
+
 ensureColumn($conn, "residents", "resident_code", "resident_code VARCHAR(50) DEFAULT NULL");
+ensureColumn($conn, "residents", "photo_path", "photo_path VARCHAR(255) DEFAULT ''");
+ensureColumn($conn, "appointments", "service_category", "service_category VARCHAR(50) DEFAULT 'health'");
+ensureColumn($conn, "appointments", "other_service", "other_service VARCHAR(180) DEFAULT ''");
 ensureColumn($conn, "residents", "family_information", "family_information TEXT");
 ensureColumn($conn, "residents", "valid_id_path", "valid_id_path VARCHAR(255) DEFAULT ''");
 ensureColumn($conn, "residents", "proof_of_residency_path", "proof_of_residency_path VARCHAR(255) DEFAULT ''");
@@ -230,7 +247,7 @@ foreach ($roles as $role) {
                      ON DUPLICATE KEY UPDATE role_name = VALUES(role_name)");
 }
 
-$default_password = password_hash("Barangay123", PASSWORD_DEFAULT);
+$default_password = password_hash("123", PASSWORD_DEFAULT);
 $users = [
     [1, "Super Administrator", "superadmin", "superadmin@barangayconnect.test"],
     [2, "Barangay Captain", "captain", "captain@barangayconnect.test"],
@@ -324,5 +341,5 @@ foreach ($inventory_items as $item) {
                      WHERE NOT EXISTS (SELECT 1 FROM inventory WHERE asset_name = '$asset')");
 }
 
-echo "<br>Setup complete. Default password for seeded accounts: Barangay123";
+echo "<br>Setup complete. Default password for seeded accounts: 123";
 ?>

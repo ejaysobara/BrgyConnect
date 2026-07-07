@@ -2,7 +2,7 @@
 include "../../includes/auth_check.php";
 include "../../config/database.php";
 
-requireRoles([1, 2, 6]);
+requireStaffLevel(1); // Tanod and above: blotter reports and complaints
 
 $message = "";
 $statuses = ["Pending", "Under Investigation", "For Mediation", "Settled", "Court Action", "Closed"];

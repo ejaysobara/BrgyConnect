@@ -57,11 +57,65 @@ function getRoleList() {
         2 => "Barangay Captain",
         3 => "Barangay Secretary",
         4 => "Barangay Treasurer",
-        5 => "Barangay Health Worker",
-        6 => "Lupon / Barangay Tanod",
-        7 => "SK Chairman",
+        5 => "Barangay Health Staff",
+        6 => "Barangay Tanod",
+        7 => "Barangay Chairman",
         8 => "Resident / Constituent"
     ];
+}
+
+/*
+ * Staff access hierarchy (higher level inherits everything below it):
+ *   0 Resident, 1 Tanod / Health Staff, 2 Treasurer, 3 Secretary,
+ *   4 Chairman, 5 Captain, 6 Senior Administrator
+ */
+function staffLevel($role_id = null) {
+    $role_id = $role_id === null ? currentRoleId() : (int)$role_id;
+    $levels = [
+        1 => 6, // Senior Administrator
+        2 => 5, // Captain
+        7 => 4, // Chairman
+        3 => 3, // Secretary
+        4 => 2, // Treasurer
+        6 => 1, // Tanod
+        5 => 1, // Health Staff (plus separate health-record access flag)
+        8 => 0  // Resident
+    ];
+    return $levels[$role_id] ?? 0;
+}
+
+function hasStaffLevel($minimum_level) {
+    return staffLevel() >= $minimum_level;
+}
+
+function requireStaffLevel($minimum_level) {
+    requireLogin();
+
+    if (!hasStaffLevel($minimum_level)) {
+        redirectTo("auth/unauthorized.php");
+    }
+}
+
+function isResident() {
+    return currentRoleId() === 8;
+}
+
+function isStaff() {
+    return staffLevel() >= 1;
+}
+
+// Health records are private to the resident who owns them and authorized
+// health staff. Captain/administrator retain oversight access.
+function canViewHealthRecords() {
+    return currentRoleId() === 5 || staffLevel() >= 5;
+}
+
+function requireHealthAccess() {
+    requireLogin();
+
+    if (!canViewHealthRecords()) {
+        redirectTo("auth/unauthorized.php");
+    }
 }
 
 function getRoleName($role_id) {

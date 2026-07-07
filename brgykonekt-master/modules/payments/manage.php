@@ -2,7 +2,7 @@
 include "../../includes/auth_check.php";
 include "../../config/database.php";
 
-requireRoles([1, 4]);
+requireStaffLevel(2); // Treasurer and above: payments and financial records
 
 $message = "";
 $error = "";

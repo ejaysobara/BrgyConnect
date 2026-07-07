@@ -50,13 +50,14 @@ renderHeader("Resident Dashboard", "Access barangay services, requests, appointm
     <div class="service-grid">
         <a class="service-card" href="<?php echo e(appPath("modules/residents/profile.php")); ?>"><span class="service-icon">ID</span><strong>Resident profile</strong></a>
         <a class="service-card" href="<?php echo e(appPath("modules/documents/request.php")); ?>"><span class="service-icon">DC</span><strong>Request documents</strong></a>
-        <a class="service-card" href="<?php echo e(appPath("modules/health/book.php")); ?>"><span class="service-icon">HC</span><strong>Book appointment</strong></a>
+        <a class="service-card" href="<?php echo e(appPath("modules/appointments/book.php")); ?>"><span class="service-icon">AP</span><strong>Book appointment</strong></a>
         <a class="service-card" href="<?php echo e(appPath("modules/blotter/file.php")); ?>"><span class="service-icon">BL</span><strong>File complaint</strong></a>
+        <a class="service-card" href="<?php echo e(appPath("modules/community/feed.php")); ?>"><span class="service-icon">CF</span><strong>Community feed</strong></a>
     </div>
 </section>
 
 <section class="panel">
-    <h3>Latest Announcements</h3>
+    <h3>Latest from the Community Feed</h3>
     <div class="table-wrap">
         <table>
             <thead>

@@ -11,7 +11,7 @@ $logs = mysqli_query($conn, "SELECT audit_logs.*, users.full_name
                              LIMIT 100");
 
 include "../includes/header.php";
-renderHeader("Audit Logs", "Review recent system actions, administrative updates, and account activity.", "audit");
+renderHeader("Audit Logs", "Review recent system actions, administrative updates, and account activity.", "settings");
 ?>
 
 <section class="panel">

@@ -41,7 +41,7 @@ if (isset($_POST["restore_database"])) {
 }
 
 include "../includes/header.php";
-renderHeader("Restore Database", "Upload a SQL backup to restore barangay system records.", "restore");
+renderHeader("Restore Database", "Upload a SQL backup to restore barangay system records.", "settings");
 ?>
 
 <section class="panel">

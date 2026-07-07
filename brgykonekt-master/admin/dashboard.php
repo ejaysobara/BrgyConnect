@@ -35,10 +35,12 @@ renderHeader("Admin / Staff Dashboard", "Monitor barangay services, requests, co
         <h3>Pending Requests</h3>
         <p><?php echo e($pending_requests); ?></p>
     </div>
-    <div class="card">
-        <h3>Collected Today</h3>
-        <p>PHP <?php echo e(number_format($collection_today, 2)); ?></p>
-    </div>
+    <?php if (hasStaffLevel(2)) { // financial figures: Treasurer and above ?>
+        <div class="card">
+            <h3>Collected Today</h3>
+            <p>PHP <?php echo e(number_format($collection_today, 2)); ?></p>
+        </div>
+    <?php } ?>
     <div class="card">
         <h3>Appointments Today</h3>
         <p><?php echo e($appointments_today); ?></p>
@@ -56,17 +58,18 @@ renderHeader("Admin / Staff Dashboard", "Monitor barangay services, requests, co
 <section class="panel">
     <h3>Service Shortcuts</h3>
     <div class="service-grid">
-        <?php if (canAccess([1, 3])) { ?>
-            <a class="service-card" href="<?php echo e(appPath("modules/residents/verify.php")); ?>"><span class="service-icon">RV</span><strong>Verify residents</strong></a>
+        <?php if (hasStaffLevel(1)) { ?>
+            <a class="service-card" href="<?php echo e(appPath("modules/blotter/manage.php")); ?>"><span class="service-icon">BC</span><strong>Blotter & complaints</strong></a>
         <?php } ?>
-        <?php if (canAccess([1, 2, 3])) { ?>
-            <a class="service-card" href="<?php echo e(appPath("modules/documents/manage.php")); ?>"><span class="service-icon">DR</span><strong>Document workflow</strong></a>
-        <?php } ?>
-        <?php if (canAccess([1, 4])) { ?>
+        <?php if (hasStaffLevel(2)) { ?>
             <a class="service-card" href="<?php echo e(appPath("modules/payments/manage.php")); ?>"><span class="service-icon">OR</span><strong>Payments & receipts</strong></a>
         <?php } ?>
-        <?php if (canAccess([1, 2, 5])) { ?>
-            <a class="service-card" href="<?php echo e(appPath("modules/health/manage.php")); ?>"><span class="service-icon">HC</span><strong>Health center</strong></a>
+        <?php if (hasStaffLevel(3)) { ?>
+            <a class="service-card" href="<?php echo e(appPath("modules/residents/verify.php")); ?>"><span class="service-icon">RV</span><strong>Verify residents</strong></a>
+            <a class="service-card" href="<?php echo e(appPath("modules/documents/manage.php")); ?>"><span class="service-icon">DR</span><strong>Document workflow</strong></a>
+        <?php } ?>
+        <?php if (canViewHealthRecords()) { ?>
+            <a class="service-card" href="<?php echo e(appPath("modules/health/manage.php")); ?>"><span class="service-icon">AP</span><strong>Appointments</strong></a>
         <?php } ?>
     </div>
 </section>

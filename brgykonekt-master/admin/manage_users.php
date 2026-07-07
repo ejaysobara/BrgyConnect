@@ -24,6 +24,22 @@ if (isset($_GET["edit"])) {
     $edit_user = $edit_result ? mysqli_fetch_assoc($edit_result) : null;
 }
 
+if (isset($_GET["delete"])) {
+    $delete_id = (int)$_GET["delete"];
+    if ($delete_id === (int)$_SESSION["user_id"]) {
+        $error = "You cannot delete your own account while logged in.";
+    } else {
+        $name_result = mysqli_query($conn, "SELECT full_name FROM users WHERE id = '$delete_id'");
+        $name_row = $name_result ? mysqli_fetch_assoc($name_result) : null;
+        if (mysqli_query($conn, "DELETE FROM users WHERE id = '$delete_id'")) {
+            addAuditLog($conn, $_SESSION["user_id"], "delete_user", $name_row["full_name"] ?? "user#$delete_id");
+            $message = "User account deleted.";
+        } else {
+            $error = "Unable to delete user: " . mysqli_error($conn);
+        }
+    }
+}
+
 if (isset($_POST["save_user"])) {
     $user_id = (int)($_POST["user_id"] ?? 0);
     $role_id = (int)$_POST["role_id"];
@@ -48,7 +64,7 @@ if (isset($_POST["save_user"])) {
             $error = "Unable to update user: " . mysqli_error($conn);
         }
     } else {
-        $hashed = password_hash($password !== "" ? $password : "Barangay123", PASSWORD_DEFAULT);
+        $hashed = password_hash($password !== "" ? $password : "123", PASSWORD_DEFAULT);
         $sql = "INSERT INTO users (role_id, full_name, username, email, password, status)
                 VALUES ('$role_id', '$full_name', '$username', '$email', '$hashed', '$status')";
 
@@ -159,7 +175,14 @@ renderHeader("User Account Management", "Create, update, filter, and assign role
                             <td><?php echo e($row["username"]); ?></td>
                             <td><?php echo e($row["role_name"] ?? "Unassigned"); ?></td>
                             <td><span class="badge"><?php echo e($row["status"]); ?></span></td>
-                            <td><a class="button secondary" href="manage_users.php?edit=<?php echo e($row["id"]); ?>">Edit</a></td>
+                            <td>
+                                <div class="quick-actions">
+                                    <a class="button secondary" href="manage_users.php?edit=<?php echo e($row["id"]); ?>">Edit</a>
+                                    <?php if ((int)$row["id"] !== (int)$_SESSION["user_id"]) { ?>
+                                        <a class="button secondary" href="manage_users.php?delete=<?php echo e($row["id"]); ?>" onclick="return confirm('Delete this account permanently?');">Delete</a>
+                                    <?php } ?>
+                                </div>
+                            </td>
                         </tr>
                     <?php } ?>
                 <?php } else { ?>
