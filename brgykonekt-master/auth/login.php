@@ -56,15 +56,15 @@ if (isset($_POST["login"])) {
     <div class="auth-shell">
         <section class="auth-hero">
             <div class="brand">
-                <div class="brand-mark">BK</div>
+                <div class="brand-seal" aria-hidden="true"><span>BK</span></div>
                 <div>
                     <h1>BrgyKonekt</h1>
-                    <span>Digital Barangay Services</span>
+                    <span class="tag">Digital Barangay Services</span>
                 </div>
             </div>
             <div class="auth-copy">
                 <h1>One barangay portal for residents, staff, reports, and service requests.</h1>
-                <p>Inspired by the clean eGovPH service grid: fast access, verified records, and role-based workflows for every barangay office.</p>
+                <p>Fast access, verified records, and role-based workflows for every barangay office &mdash; in one place.</p>
                 <div class="mini-services">
                     <span>Documents</span>
                     <span>Health</span>

@@ -21,9 +21,6 @@ $released_documents = getCountValue($conn, "SELECT COUNT(*) AS total FROM docume
 $appointments_today = getCountValue($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = CURDATE()");
 $open_cases = getCountValue($conn, "SELECT COUNT(*) AS total FROM blotter_cases WHERE status NOT IN ('Closed', 'Settled')");
 $total_activities = getCountValue($conn, "SELECT COUNT(*) AS total FROM activities");
-$total_inventory = getCountValue($conn, "SELECT COUNT(*) AS total FROM inventory");
-$total_pets = getCountValue($conn, "SELECT COUNT(*) AS total FROM pets");
-$vaccinated_pets = getCountValue($conn, "SELECT COUNT(*) AS total FROM pets WHERE vaccination_status = 'Vaccinated'");
 $collection_today = getSumValue($conn, "SELECT SUM(amount) AS total FROM payments WHERE DATE(payment_date) = CURDATE()");
 $collection_month = getSumValue($conn, "SELECT SUM(amount) AS total FROM payments WHERE MONTH(payment_date) = MONTH(CURDATE()) AND YEAR(payment_date) = YEAR(CURDATE())");
 
@@ -55,7 +52,7 @@ $monthly_collections = fetchReportRows(mysqli_query($conn, "SELECT DATE_FORMAT(p
                                                             LIMIT 6"));
 
 include "../../includes/header.php";
-renderHeader("Reports and Analytics", "Track resident, document, health, financial, inventory, pet, blotter, appointment, and activity reports.", "reports");
+renderHeader("Reports and Analytics", "Track resident, document, health, financial, blotter, appointment, and activity reports.", "reports");
 ?>
 
 <section class="cards">
@@ -68,9 +65,6 @@ renderHeader("Reports and Analytics", "Track resident, document, health, financi
     <div class="card"><h3>Collection Today</h3><p>PHP <?php echo e(number_format($collection_today, 2)); ?></p></div>
     <div class="card"><h3>Collection This Month</h3><p>PHP <?php echo e(number_format($collection_month, 2)); ?></p></div>
     <div class="card"><h3>Activities</h3><p><?php echo e($total_activities); ?></p></div>
-    <div class="card"><h3>Inventory Items</h3><p><?php echo e($total_inventory); ?></p></div>
-    <div class="card"><h3>Registered Pets</h3><p><?php echo e($total_pets); ?></p></div>
-    <div class="card"><h3>Vaccinated Pets</h3><p><?php echo e($vaccinated_pets); ?></p></div>
 </section>
 
 <section class="grid-2">

@@ -38,15 +38,15 @@ if (isset($_POST["register"]) && $allow_registration) {
     <div class="auth-shell">
         <section class="auth-hero">
             <div class="brand">
-                <div class="brand-mark">BK</div>
+                <div class="brand-seal" aria-hidden="true"><span>BK</span></div>
                 <div>
                     <h1>BrgyKonekt</h1>
-                    <span>Resident Access</span>
+                    <span class="tag">Resident Access</span>
                 </div>
             </div>
             <div class="auth-copy">
                 <h1>Create your resident account and start online barangay requests.</h1>
-                <p>After registration, complete your profile and wait for barangay verification to unlock document requests, appointments, complaints, pets, and equipment borrowing.</p>
+                <p>After registration, complete your profile and wait for barangay verification to unlock document requests, appointments, and complaints.</p>
             </div>
         </section>
 

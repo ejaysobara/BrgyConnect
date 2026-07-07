@@ -41,7 +41,7 @@ renderHeader("Resident Dashboard", "Access barangay services, requests, appointm
 
 <?php if (!$resident || $resident["status"] !== "Verified") { ?>
     <div class="notice">
-        <p class="error">Complete your resident profile and wait for barangay verification before requesting documents, filing complaints, registering pets, or borrowing equipment.</p>
+        <p class="error">Complete your resident profile and wait for barangay verification before requesting documents or filing complaints.</p>
     </div>
 <?php } ?>
 
@@ -52,8 +52,6 @@ renderHeader("Resident Dashboard", "Access barangay services, requests, appointm
         <a class="service-card" href="<?php echo e(appPath("modules/documents/request.php")); ?>"><span class="service-icon">DC</span><strong>Request documents</strong></a>
         <a class="service-card" href="<?php echo e(appPath("modules/health/book.php")); ?>"><span class="service-icon">HC</span><strong>Book appointment</strong></a>
         <a class="service-card" href="<?php echo e(appPath("modules/blotter/file.php")); ?>"><span class="service-icon">BL</span><strong>File complaint</strong></a>
-        <a class="service-card" href="<?php echo e(appPath("modules/pets/register.php")); ?>"><span class="service-icon">PT</span><strong>Register pet</strong></a>
-        <a class="service-card" href="<?php echo e(appPath("modules/inventory/borrow.php")); ?>"><span class="service-icon">EQ</span><strong>Borrow equipment</strong></a>
     </div>
 </section>
 
