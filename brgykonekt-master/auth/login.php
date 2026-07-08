@@ -9,6 +9,11 @@ if (($_GET["notice"] ?? "") === "privacy_declined") {
     $message = "Registration cancelled because consent was not provided.";
 }
 
+// Shown when an active session is ended because access was revoked.
+if (($_GET["notice"] ?? "") === "access_revoked") {
+    $message = "Your access has been revoked by the barangay. Please contact the barangay office for assistance.";
+}
+
 if (isset($_SESSION["user_id"])) {
     if (currentRoleId() === 8) {
         header("Location: ../resident/dashboard.php");
@@ -19,10 +24,11 @@ if (isset($_SESSION["user_id"])) {
 }
 
 if (isset($_POST["login"])) {
+    $message = "";
     $username = trim($_POST["username"]);
     $password = $_POST["password"];
 
-    $sql = "SELECT * FROM users WHERE username = ? AND status = 'Active'";
+    $sql = "SELECT * FROM users WHERE username = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "s", $username);
     mysqli_stmt_execute($stmt);
@@ -31,7 +37,11 @@ if (isset($_POST["login"])) {
     if ($result && mysqli_num_rows($result) === 1) {
         $user = mysqli_fetch_assoc($result);
 
-        if (password_verify($password, $user["password"])) {
+        if (password_verify($password, $user["password"]) && $user["status"] !== "Active") {
+            $message = $user["status"] === "Revoked"
+                ? "Your access has been revoked by the barangay. Please contact the barangay office for assistance."
+                : "Your account is currently inactive. Please contact the barangay office.";
+        } elseif (password_verify($password, $user["password"])) {
             $_SESSION["user_id"] = $user["id"];
             $_SESSION["full_name"] = $user["full_name"];
             $_SESSION["role_id"] = $user["role_id"];
@@ -45,7 +55,9 @@ if (isset($_POST["login"])) {
         }
     }
 
-    $message = "Invalid username or password.";
+    if ($message === "") {
+        $message = "Invalid username or password.";
+    }
 }
 ?>
 

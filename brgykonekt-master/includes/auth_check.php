@@ -33,6 +33,24 @@ function requireLogin() {
     if (!isset($_SESSION["user_id"])) {
         redirectTo("auth/login.php");
     }
+
+    // End active sessions of accounts that have been revoked or deactivated
+    // (e.g. resident access revoked by the Barangay Captain). Records are
+    // kept; only portal access is blocked.
+    $conn = $GLOBALS["conn"] ?? null;
+    if ($conn) {
+        $stmt = mysqli_prepare($conn, "SELECT status FROM users WHERE id = ? LIMIT 1");
+        mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = $result ? mysqli_fetch_assoc($result) : null;
+
+        if (!$row || $row["status"] !== "Active") {
+            session_unset();
+            session_destroy();
+            redirectTo("auth/login.php?notice=access_revoked");
+        }
+    }
 }
 
 function requireRoles($allowed_roles) {

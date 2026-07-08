@@ -31,9 +31,26 @@ if (isset($_GET["reject"]) && $can_moderate) {
 
 if (isset($_GET["revoke"]) && $can_revoke) {
     $resident_id = (int)$_GET["revoke"];
-    mysqli_query($conn, "UPDATE residents SET status = 'Pending' WHERE id = '$resident_id' AND status = 'Verified'");
-    $message = "Resident's verified status has been revoked.";
-    addAuditLog($conn, $_SESSION["user_id"], "revoke_resident_verification", "resident#$resident_id");
+    // Revoking blocks portal access (login + active sessions) but keeps all
+    // records: the resident row and user account are only flagged, never deleted.
+    mysqli_query($conn, "UPDATE residents SET status = 'Revoked' WHERE id = '$resident_id' AND status = 'Verified'");
+    mysqli_query($conn, "UPDATE users
+                         INNER JOIN residents ON residents.user_id = users.id
+                         SET users.status = 'Revoked'
+                         WHERE residents.id = '$resident_id' AND residents.status = 'Revoked'");
+    $message = "Resident access revoked. They can no longer log in, but all records are kept.";
+    addAuditLog($conn, $_SESSION["user_id"], "revoke_resident_access", "resident#$resident_id");
+}
+
+if (isset($_GET["reinstate"]) && $can_revoke) {
+    $resident_id = (int)$_GET["reinstate"];
+    mysqli_query($conn, "UPDATE users
+                         INNER JOIN residents ON residents.user_id = users.id
+                         SET users.status = 'Active'
+                         WHERE residents.id = '$resident_id' AND residents.status = 'Revoked'");
+    mysqli_query($conn, "UPDATE residents SET status = 'Verified' WHERE id = '$resident_id' AND status = 'Revoked'");
+    $message = "Resident access reinstated.";
+    addAuditLog($conn, $_SESSION["user_id"], "reinstate_resident_access", "resident#$resident_id");
 }
 
 $query = "SELECT residents.*, users.username
@@ -112,7 +129,11 @@ renderHeader("Resident Records", "Search and review resident profiles. Click a r
                                     <div class="quick-actions">
                                         <?php if ($row["status"] === "Verified") { ?>
                                             <?php if ($can_revoke) { ?>
-                                                <a class="button secondary" href="verify.php?revoke=<?php echo e($row["id"]); ?>" onclick="return confirm('Revoke this resident\'s verified status?');">Revoke</a>
+                                                <a class="button secondary" href="verify.php?revoke=<?php echo e($row["id"]); ?>" onclick="return confirm('Revoke this resident\'s access? They will no longer be able to log in, but their records will be kept.');">Revoke</a>
+                                            <?php } ?>
+                                        <?php } elseif ($row["status"] === "Revoked") { ?>
+                                            <?php if ($can_revoke) { ?>
+                                                <a class="button" href="verify.php?reinstate=<?php echo e($row["id"]); ?>" onclick="return confirm('Reinstate this resident\'s access?');">Reinstate</a>
                                             <?php } ?>
                                         <?php } else { ?>
                                             <a class="button" href="verify.php?verify=<?php echo e($row["id"]); ?>">Verify</a>

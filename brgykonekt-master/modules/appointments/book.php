@@ -140,12 +140,8 @@ renderHeader("Appointments", "Book barangay services and print blank copies of o
             <button type="submit" name="book_appointment">Book Appointment</button>
         </form>
     <?php } ?>
-</section>
-
-<section class="panel">
-    <h3>Printable Blank Forms</h3>
-    <p>Prefer to file physically? Print a blank copy of any form below (or save it as PDF), fill it out, and submit it at the barangay hall.</p>
-    <?php include "../forms/form_list.php"; ?>
+    <p><small>Prefer to fill out a form online or print a blank copy? Head to
+        <a href="<?php echo e(appPath("modules/documents/request.php")); ?>">Documents</a>.</small></p>
 </section>
 
 <section class="panel">
