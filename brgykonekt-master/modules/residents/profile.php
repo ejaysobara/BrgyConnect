@@ -1,8 +1,10 @@
 <?php
 include "../../includes/auth_check.php";
 include "../../config/database.php";
+require_once "../../includes/privacy.php";
 
 requireRoles([8]);
+requirePrivacyConsent($conn);
 
 $user_id = (int)$_SESSION["user_id"];
 $message = "";
@@ -81,6 +83,10 @@ if (isset($_POST["save_profile"])) {
         $resident_id = $resident ? (int)$resident["id"] : mysqli_insert_id($conn);
         $resident_code = "BRGY-" . str_pad((string)$resident_id, 6, "0", STR_PAD_LEFT);
         mysqli_query($conn, "UPDATE residents SET resident_code = '$resident_code' WHERE id = '$resident_id'");
+        // Persist the privacy consent given earlier this session (RA 10173).
+        if (!empty($_SESSION["privacy_consent"])) {
+            recordResidentConsent($conn, $resident_id);
+        }
         $message = "Profile saved successfully. Please wait for barangay verification.";
         $check = mysqli_query($conn, "SELECT * FROM residents WHERE user_id = '$user_id'");
         $resident = $check ? mysqli_fetch_assoc($check) : null;

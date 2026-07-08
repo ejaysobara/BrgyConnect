@@ -1,18 +1,18 @@
 <div class="form-title" style="text-decoration: underline;">Certificate of Indigency</div>
 
-<div class="row" style="text-align:right;">Date: <span class="line"></span></div>
+<div class="row" style="text-align:right;">Date: <?php echo dfLine("date_today"); ?></div>
 
 <p style="margin-top: 28px;">To whom it may concern:</p>
 
 <p style="text-indent: 40px; line-height: 2;">
-    This is to certify that <span class="line long"></span>,
-    <span class="line short"></span> years old, is a bonafide resident and considered
+    This is to certify that <?php echo dfLine("full_name", "long"); ?>,
+    <?php echo dfLine("age", "short"); ?> years old, is a bonafide resident and considered
     <strong>an indigent member of our community</strong> based on our records. He/she meets
     the criteria set forth by our Barangay in terms of income and livelihood.
 </p>
 
 <p style="text-indent: 40px; line-height: 2;">
-    This certificate is issued upon request for <span class="line long"></span>.
+    This certificate is issued upon request for <?php echo dfLine("purpose", "long"); ?>.
 </p>
 
 <p style="text-indent: 40px; line-height: 2;">

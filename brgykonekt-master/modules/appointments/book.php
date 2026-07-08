@@ -1,8 +1,10 @@
 <?php
 include "../../includes/auth_check.php";
 include "../../config/database.php";
+require_once "../../includes/privacy.php";
 
 requireRoles([8]);
+requirePrivacyConsent($conn);
 
 $user_id = (int)$_SESSION["user_id"];
 $message = "";

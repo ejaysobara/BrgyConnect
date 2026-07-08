@@ -1,6 +1,13 @@
 <?php
 include "../includes/auth_check.php";
 include "../config/database.php";
+require_once "../includes/privacy.php";
+
+// RA 10173: the Data Privacy Notice must be accepted before any personal
+// information is collected. Consent is recorded by auth/privacy_notice.php.
+if (empty($_SESSION["privacy_consent"])) {
+    redirectTo("auth/privacy_notice.php?context=register");
+}
 
 $message = "";
 $error = "";

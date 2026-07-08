@@ -4,6 +4,11 @@ include "../config/database.php";
 
 $message = "";
 
+// Shown when a user declines the Data Privacy Notice (RA 10173).
+if (($_GET["notice"] ?? "") === "privacy_declined") {
+    $message = "Registration cancelled because consent was not provided.";
+}
+
 if (isset($_SESSION["user_id"])) {
     if (currentRoleId() === 8) {
         header("Location: ../resident/dashboard.php");
