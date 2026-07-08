@@ -38,23 +38,42 @@ if (isset($_POST["book_appointment"])) {
         $appointment_date = mysqli_real_escape_string($conn, $_POST["appointment_date"]);
         $appointment_time = mysqli_real_escape_string($conn, $_POST["appointment_time"]);
 
+        // Only health bookings reference a health_services row; validate the
+        // chosen service actually exists so the FK cannot fail.
+        $valid_health_service = false;
+        if ($service_category === "health" && $health_service_id > 0) {
+            $service_check = mysqli_prepare($conn, "SELECT id FROM health_services WHERE id = ? LIMIT 1");
+            mysqli_stmt_bind_param($service_check, "i", $health_service_id);
+            mysqli_stmt_execute($service_check);
+            $service_check_result = mysqli_stmt_get_result($service_check);
+            $valid_health_service = $service_check_result && mysqli_num_rows($service_check_result) === 1;
+        }
+
         if ($service_category === "other" && $other_service === "") {
             $error = "Please describe the service you want to book under Other Services.";
-        } elseif ($service_category === "health" && $health_service_id === 0) {
+        } elseif ($service_category === "health" && !$valid_health_service) {
             $error = "Please choose a health service.";
         } else {
-            if ($service_category !== "health") {
-                $health_service_id = 0;
-            }
             if ($service_category !== "other") {
                 $other_service = "";
             }
+
+            // Non-health appointments store NULL (not 0) so the foreign key
+            // on health_service_id is satisfied. Make the column nullable if
+            // this database still has it as NOT NULL.
+            $column_check = mysqli_query($conn, "SHOW COLUMNS FROM appointments LIKE 'health_service_id'");
+            $column = $column_check ? mysqli_fetch_assoc($column_check) : null;
+            if ($column && strtoupper($column["Null"]) === "NO") {
+                mysqli_query($conn, "ALTER TABLE appointments MODIFY health_service_id INT NULL DEFAULT NULL");
+            }
+
+            $health_service_sql = $service_category === "health" ? "'" . $health_service_id . "'" : "NULL";
             $service_category_safe = mysqli_real_escape_string($conn, $service_category);
             $other_service_safe = mysqli_real_escape_string($conn, $other_service);
             $queue_number = getCountValue($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = '$appointment_date'") + 1;
 
             $sql = "INSERT INTO appointments (resident_id, health_service_id, service_category, other_service, appointment_date, appointment_time, queue_number, status)
-                    VALUES ('$resident_id', '$health_service_id', '$service_category_safe', '$other_service_safe', '$appointment_date', '$appointment_time', '$queue_number', 'Pending')";
+                    VALUES ('$resident_id', $health_service_sql, '$service_category_safe', '$other_service_safe', '$appointment_date', '$appointment_time', '$queue_number', 'Pending')";
 
             if (mysqli_query($conn, $sql)) {
                 $message = "Appointment booked successfully. Your queue number is $queue_number.";
