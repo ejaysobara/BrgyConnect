@@ -32,5 +32,5 @@
 
 <div class="sig-block">
     <div class="sig"><span class="line"></span><small>Applicant's Signature over Printed Name</small></div>
-    <div class="sig"><span class="line"></span><small>Punong Barangay / Authorized Official</small></div>
+    <div class="sig"><?php echo officialLine("captain"); ?><small>Punong Barangay / Authorized Official</small></div>
 </div>

@@ -36,6 +36,11 @@ renderHeader("Document Requests", "Move requests through verification, approval,
         <p class="message"><?php echo e($message); ?></p>
     <?php } ?>
 
+    <div class="quick-actions">
+        <a class="button" href="<?php echo e(appPath("modules/documents/manage.php")); ?>">Document Requests</a>
+        <a class="button secondary" href="<?php echo e(appPath("modules/forms/dform_manage.php")); ?>">D-Form Submissions</a>
+    </div>
+
     <div class="table-wrap">
         <table>
             <thead>

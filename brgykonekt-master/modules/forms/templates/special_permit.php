@@ -1,32 +1,28 @@
 <div class="form-title">Request for Special Permit</div>
 
-<div class="row" style="text-align:right;">Date: <span class="line"></span></div>
+<div class="row" style="text-align:right;">Date: <?php echo dfLine("date_today"); ?></div>
 
 <div class="section-title">Purpose</div>
 <div class="row">
-    <span class="checkbox"></span> Community Event &nbsp;&nbsp;
-    <span class="checkbox"></span> Construction / Repair &nbsp;&nbsp;
-    <span class="checkbox"></span> Transport / Carry Cargo<br><br>
-    <span class="checkbox"></span> Fundraising Activity &nbsp;&nbsp;
-    <span class="checkbox"></span> Use of Barangay Facility &nbsp;&nbsp;
-    <span class="checkbox"></span> Others (specify): <span class="line long"></span>
+    <?php echo dfCheck("purpose_type", "Community Event"); ?> Community Event &nbsp;&nbsp;
+    <?php echo dfCheck("purpose_type", "Construction / Repair"); ?> Construction / Repair &nbsp;&nbsp;
+    <?php echo dfCheck("purpose_type", "Transport / Carry Cargo"); ?> Transport / Carry Cargo<br><br>
+    <?php echo dfCheck("purpose_type", "Fundraising Activity"); ?> Fundraising Activity &nbsp;&nbsp;
+    <?php echo dfCheck("purpose_type", "Use of Barangay Facility"); ?> Use of Barangay Facility &nbsp;&nbsp;
+    <?php echo dfCheck("purpose_type", "Others"); ?> Others (specify): <?php echo dfLine("purpose_other", "long"); ?>
 </div>
 
 <div class="section-title">Applicant Details</div>
-<div class="row">Name of Applicant / Organization: <span class="line long"></span></div>
-<div class="row">Address: <span class="line full"></span></div>
-<div class="row">Contact No.: <span class="line"></span> &nbsp; Email: <span class="line"></span></div>
+<div class="row">Name of Applicant / Organization: <?php echo dfLine("full_name", "long"); ?></div>
+<div class="row">Address: <?php echo dfLine("address", "full"); ?></div>
+<div class="row">Contact No.: <?php echo dfLine("contact_number"); ?> &nbsp; Email: <?php echo dfLine("email"); ?></div>
 
 <div class="section-title">Details of the Request</div>
 <div class="row">Description of activity / unit / equipment to be used:</div>
-<div class="writing-lines">
-    <span class="line full"></span>
-    <span class="line full"></span>
-    <span class="line full"></span>
-</div>
-<div class="row">Location / Venue: <span class="line long"></span></div>
-<div class="row">Date Covered: From <span class="line"></span> To <span class="line"></span></div>
-<div class="row">Expected number of participants (if applicable): <span class="line short"></span></div>
+<?php echo dfWriting("description", 3); ?>
+<div class="row">Location / Venue: <?php echo dfLine("venue", "long"); ?></div>
+<div class="row">Date Covered: From <?php echo dfLine("date_from"); ?> To <?php echo dfLine("date_to"); ?></div>
+<div class="row">Expected number of participants (if applicable): <?php echo dfLine("participants", "short"); ?></div>
 
 <div class="section-title">Requirements (arrange in the following order)</div>
 <div class="row">

@@ -58,6 +58,7 @@ $dform["issue_year"] = date("y");
 $dform["control_number"] = "DF-" . date("Y") . "-" . str_pad((string)$submission["id"], 5, "0", STR_PAD_LEFT);
 
 $brgy = getBarangayIdentity($conn);
+$brgy_officials = getBarangayOfficials($conn);
 $is_draft = $submission["workflow_status"] !== "Approved";
 ?>
 <!DOCTYPE html>
@@ -130,6 +131,10 @@ $is_draft = $submission["workflow_status"] !== "Approved";
         <div class="rule"></div>
 
         <?php include $template_path; ?>
+
+        <p style="margin-top: 36px; font-size: 10px; color: #555; text-align: right;">
+            Date printed: <?php echo e(date("F j, Y g:i A")); ?>
+        </p>
     </div>
 </body>
 </html>

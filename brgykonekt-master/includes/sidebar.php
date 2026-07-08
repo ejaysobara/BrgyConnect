@@ -29,7 +29,6 @@ function renderNavbar($active = "") {
         navItem("dashboard", "Home", "resident/dashboard.php", "HM"),
         navItem("community", "Community Feed", "modules/community/feed.php", "CF"),
         navItem("documents", "Documents", "modules/documents/request.php", "DC"),
-        navItem("dforms", "D-Forms", "modules/forms/dforms.php", "DF"),
         navItem("appointments", "Appointments", "modules/appointments/book.php", "AP"),
         navItem("blotter", "File Complaint", "modules/blotter/file.php", "BL"),
     ];
@@ -45,7 +44,6 @@ function renderNavbar($active = "") {
         navItem("reports", "Reports", "modules/reports/dashboard.php", "RP", 2),
         navItem("residents", "Residents", "modules/residents/verify.php", "RV", 1),
         navItem("documents", "Documents", "modules/documents/manage.php", "DR", 3),
-        navItem("dforms", "D-Forms", "modules/forms/dform_manage.php", "DF", 3),
         navItem("health", "Appointments", "modules/health/manage.php", "AP", 0, true),
     ];
 

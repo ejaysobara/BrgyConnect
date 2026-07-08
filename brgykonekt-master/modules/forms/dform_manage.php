@@ -49,7 +49,7 @@ $submissions_result = mysqli_stmt_get_result($stmt);
 $definitions = getDFormDefinitions();
 
 include "../../includes/header.php";
-renderHeader("D-Form Submissions", "Review digital form submissions, then approve to release the auto-filled official document.", "dforms");
+renderHeader("D-Form Submissions", "Review digital form submissions, then approve to release the auto-filled official document.", "documents");
 ?>
 
 <section class="panel">
@@ -59,6 +59,11 @@ renderHeader("D-Form Submissions", "Review digital form submissions, then approv
     <?php if ($error !== "") { ?>
         <p class="error"><?php echo e($error); ?></p>
     <?php } ?>
+
+    <div class="quick-actions">
+        <a class="button secondary" href="<?php echo e(appPath("modules/documents/manage.php")); ?>">Document Requests</a>
+        <a class="button" href="<?php echo e(appPath("modules/forms/dform_manage.php")); ?>">D-Form Submissions</a>
+    </div>
 
     <div class="quick-actions">
         <?php foreach (["Pending", "Approved", "Rejected"] as $tab) { ?>

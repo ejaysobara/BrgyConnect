@@ -2,36 +2,25 @@
 
 <div class="two-col">
     <div>
-        <div class="row"><span class="line full"></span></div>
-        <div class="row"><span class="line full"></span></div>
+        <?php echo dfWriting("complainants", 2); ?>
         <p style="text-align:center;"><strong>Complainant/s</strong></p>
         <p style="text-align:center;">- against -</p>
-        <div class="row"><span class="line full"></span></div>
-        <div class="row"><span class="line full"></span></div>
+        <?php echo dfWriting("respondents", 2); ?>
         <p style="text-align:center;"><strong>Respondent/s</strong></p>
     </div>
     <div>
         <div class="row">Barangay Case No.: <span class="line"></span></div>
-        <div class="row">For: <span class="line long"></span></div>
+        <div class="row">For: <?php echo dfLine("case_for", "long"); ?></div>
     </div>
 </div>
 
 <p>I/WE hereby complain against the above named respondent/s for violating my/our rights and interests in the following manner:</p>
-<div class="writing-lines">
-    <span class="line full"></span>
-    <span class="line full"></span>
-    <span class="line full"></span>
-    <span class="line full"></span>
-</div>
+<?php echo dfWriting("complaint_details", 4); ?>
 
 <p>THEREFORE, I/WE pray that the following relief/s be granted to me/us in accordance with law and/or equity:</p>
-<div class="writing-lines">
-    <span class="line full"></span>
-    <span class="line full"></span>
-    <span class="line full"></span>
-</div>
+<?php echo dfWriting("relief", 3); ?>
 
-<div class="row">Made this <span class="line short"></span> day of <span class="line"></span>, 20<span class="line short" style="min-width:40px;"></span>.</div>
+<div class="row">Made this <?php echo dfLine("issue_day", "short"); ?> day of <?php echo dfLine("issue_month"); ?>, 20<?php echo dfLine("issue_year", "short"); ?>.</div>
 
 <div class="sig-block">
     <div class="sig" style="max-width: 45%; margin-left: auto;"><span class="line"></span><small>Complainant/s</small></div>

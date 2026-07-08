@@ -11,8 +11,14 @@ require_once "../../includes/dforms.php";
 
 requireLogin();
 
-// Templates are dual-mode: with no submission data they render blank.
-$dform = [];
+// Templates are dual-mode: with no submission data they render blank,
+// except the issuance/print date, which is always pre-printed.
+$dform = [
+    "date_today" => date("F j, Y"),
+    "issue_day" => date("jS"),
+    "issue_month" => date("F"),
+    "issue_year" => date("y"),
+];
 
 $forms = getPrintableForms();
 $key = $_GET["form"] ?? "";
@@ -30,6 +36,7 @@ if (!is_file($template_path)) {
 }
 
 $brgy = getBarangayIdentity($conn);
+$brgy_officials = getBarangayOfficials($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -92,6 +99,10 @@ $brgy = getBarangayIdentity($conn);
         <div class="rule"></div>
 
         <?php include $template_path; ?>
+
+        <p style="margin-top: 36px; font-size: 10px; color: #555; text-align: right;">
+            Date printed: <?php echo e(date("F j, Y g:i A")); ?>
+        </p>
     </div>
 </body>
 </html>

@@ -30,12 +30,20 @@
         <small><strong>Signature of Applicant</strong></small>
     </div>
     <div class="sig" style="max-width: 45%;">
-        <span class="line"></span>
+        <?php echo officialLine("captain"); ?>
         <small><strong>Punong Barangay</strong></small>
+    </div>
+</div>
+
+<div class="sig-block" style="margin-top: 40px;">
+    <div class="sig" style="max-width: 45%; margin-right: auto;">
+        <?php echo officialLine("secretary"); ?>
+        <small>Prepared by: <strong>Barangay Secretary</strong></small>
     </div>
 </div>
 
 <div class="row" style="margin-top: 40px;">
     Contact No.: <?php echo dfLine("contact_number"); ?><br>
-    O.R. No.: <span class="line short"></span> &nbsp; Cert. Fee: <span class="line short"></span>
+    O.R. No.: <span class="line short"></span> &nbsp; Cert. Fee: <span class="line short"></span> &nbsp;
+    Collected by: <?php echo officialLine("treasurer"); ?> <small>(Barangay Treasurer)</small>
 </div>

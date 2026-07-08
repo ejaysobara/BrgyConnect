@@ -21,8 +21,12 @@
 </p>
 
 <div class="sig-block" style="margin-top: 80px;">
+    <div class="sig" style="max-width: 45%; margin-right: auto;">
+        <?php echo officialLine("secretary"); ?>
+        <small>Prepared by: <strong>Barangay Secretary</strong></small>
+    </div>
     <div class="sig" style="max-width: 45%; margin-left: auto;">
-        <span class="line"></span>
+        <?php echo officialLine("captain"); ?>
         <small><strong>Punong Barangay</strong></small>
     </div>
 </div>

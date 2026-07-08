@@ -18,14 +18,14 @@ $definitions = getDFormDefinitions();
 $form_key = (string)($_GET["form"] ?? $_POST["form_key"] ?? "");
 
 if (!isset($definitions[$form_key])) {
-    redirectTo("modules/forms/dforms.php");
+    redirectTo("modules/documents/request.php");
 }
 
 $definition = $definitions[$form_key];
 $form_record = getDFormRecord($conn, $form_key);
 
 if (!$form_record || $form_record["status"] !== "Active") {
-    redirectTo("modules/forms/dforms.php");
+    redirectTo("modules/documents/request.php");
 }
 
 $user_id = (int)$_SESSION["user_id"];
@@ -56,7 +56,7 @@ if (isset($_POST["submit_dform"])) {
             if (mysqli_stmt_execute($stmt)) {
                 addAuditLog($conn, $user_id, "D-Form Submitted", $definition["name"], "Submission #" . mysqli_insert_id($conn));
                 $_SESSION["dform_flash"] = $definition["name"] . " submitted successfully. You will be able to download the official document once it is approved.";
-                redirectTo("modules/forms/dforms.php");
+                redirectTo("modules/documents/request.php");
             } else {
                 $errors[] = "Unable to submit the form. Please try again.";
             }
@@ -70,12 +70,12 @@ if (isset($_POST["submit_dform"])) {
 }
 
 include "../../includes/header.php";
-renderHeader($definition["name"] . " (D-Form)", "Digital version of the official barangay form. Your answers are transferred onto the printable official layout after approval.", "dforms");
+renderHeader($definition["name"] . " (D-Form)", "Digital version of the official barangay form. Your answers are transferred onto the printable official layout after approval.", "documents");
 ?>
 
 <section class="panel">
     <div class="quick-actions">
-        <a class="button secondary" href="<?php echo e(appPath("modules/forms/dforms.php")); ?>">&larr; Back to D-Forms</a>
+        <a class="button secondary" href="<?php echo e(appPath("modules/documents/request.php")); ?>">&larr; Back to Documents</a>
         <span class="badge"><?php echo e($definition["category"]); ?></span>
     </div>
 
