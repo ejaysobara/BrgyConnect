@@ -9,10 +9,15 @@ $resident_result = mysqli_query($conn, "SELECT * FROM residents WHERE user_id = 
 $resident = $resident_result ? mysqli_fetch_assoc($resident_result) : null;
 $resident_id = $resident ? (int)$resident["id"] : 0;
 
-$my_requests = getCountValue($conn, "SELECT COUNT(*) AS total FROM document_requests WHERE resident_id = '$resident_id'");
+// Requests cover fee-based documents and D-Form submissions
+// (0 if the D-Forms tables are not set up yet).
+$my_requests = getCountValue($conn, "SELECT COUNT(*) AS total FROM document_requests WHERE resident_id = '$resident_id'")
+    + getCountValue($conn, "SELECT COUNT(*) AS total FROM form_submissions WHERE resident_id = '$resident_id'");
 $my_appointments = getCountValue($conn, "SELECT COUNT(*) AS total FROM appointments WHERE resident_id = '$resident_id'");
 $my_complaints = getCountValue($conn, "SELECT COUNT(*) AS total FROM blotter_cases WHERE resident_id = '$resident_id'");
-$total_announcements = getCountValue($conn, "SELECT COUNT(*) AS total FROM announcements");
+// The community feed merges announcements and activities/events.
+$total_announcements = getCountValue($conn, "SELECT COUNT(*) AS total FROM announcements")
+    + getCountValue($conn, "SELECT COUNT(*) AS total FROM activities");
 
 $latest_announcements = mysqli_query($conn, "SELECT title, category, created_at FROM announcements ORDER BY created_at DESC LIMIT 4");
 
@@ -34,7 +39,7 @@ renderHeader("Resident Dashboard", "Access barangay services, requests, appointm
         <p><?php echo e($my_complaints); ?></p>
     </div>
     <div class="card">
-        <h3>Announcements</h3>
+        <h3>Announcements &amp; Events</h3>
         <p><?php echo e($total_announcements); ?></p>
     </div>
 </section>

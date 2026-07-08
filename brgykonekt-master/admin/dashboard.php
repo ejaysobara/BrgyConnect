@@ -9,11 +9,17 @@ if (currentRoleId() === 8) {
 }
 
 $total_residents = getCountValue($conn, "SELECT COUNT(*) AS total FROM residents");
-$pending_requests = getCountValue($conn, "SELECT COUNT(*) AS total FROM document_requests WHERE status = 'Pending'");
+// Pending work: fee-based document requests plus D-Form submissions
+// awaiting review (0 if the D-Forms tables are not set up yet).
+$pending_requests = getCountValue($conn, "SELECT COUNT(*) AS total FROM document_requests WHERE status = 'Pending'")
+    + getCountValue($conn, "SELECT COUNT(*) AS total FROM form_submissions WHERE workflow_status = 'Pending'");
 $collection_today = getSumValue($conn, "SELECT SUM(amount) AS total FROM payments WHERE DATE(payment_date) = CURDATE()");
-$appointments_today = getCountValue($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = CURDATE()");
+$appointments_today = getCountValue($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = CURDATE() AND status NOT IN ('Cancelled', 'Rejected', 'No Show')");
 $open_cases = getCountValue($conn, "SELECT COUNT(*) AS total FROM blotter_cases WHERE status NOT IN ('Closed', 'Settled')");
-$announcements = getCountValue($conn, "SELECT COUNT(*) AS total FROM announcements");
+// The community feed merges announcements and activities/events, so the
+// dashboard counter covers both.
+$announcements = getCountValue($conn, "SELECT COUNT(*) AS total FROM announcements")
+    + getCountValue($conn, "SELECT COUNT(*) AS total FROM activities");
 
 $recent_requests = mysqli_query($conn, "SELECT document_requests.*, document_types.document_name, residents.first_name, residents.last_name
                                         FROM document_requests
@@ -50,7 +56,7 @@ renderHeader("Admin / Staff Dashboard", "Monitor barangay services, requests, co
         <p><?php echo e($open_cases); ?></p>
     </div>
     <div class="card">
-        <h3>Announcements</h3>
+        <h3>Announcements &amp; Events</h3>
         <p><?php echo e($announcements); ?></p>
     </div>
 </section>
